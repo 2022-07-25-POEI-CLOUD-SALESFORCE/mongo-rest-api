@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // Phase d'autheficiation
+      const credentials = {
+        email: "christian.lisangola@gmail.com",
+        password: "12345",
+      };
+
+      //Contact à créer
+      const contact = {
+        name: "Maxime Fleury",
+        email: "maxime@gmail.com",
+        phone: "+31848484844",
+      };
+
+      let accessToken = ""; //localStorage
+
+      function authenticateAndCreateContact() {
+        fetch("http://localhost:3000/api/users/auth", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(credentials),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            fetch("http://localhost:3000/api/contacts", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: data.access_token,
+              },
+              body: JSON.stringify(contact),
+            })
+              .then((res) => res.json())
+              .then((data) => {
+                console.log(data);
+              })
+              .catch((err) => console.log(`Erreur : ${err.message}`));
+          });
+      }
+
+      //   Création d'un contact
+
+      (async function () {
+        await authenticateAndCreateContact();
+      })();
+    </script>
+  </body>
+</html>

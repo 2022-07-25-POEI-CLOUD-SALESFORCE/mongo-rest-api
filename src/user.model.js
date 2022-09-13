@@ -16,6 +16,9 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    typeUtilisateur: {
+      type: [String], //["student","instructor"]
+    },
   },
   {
     timestamps: true,
